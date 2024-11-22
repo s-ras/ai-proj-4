@@ -1,7 +1,12 @@
 namespace ai_proj_4 {
-    public class Answer(int d, Dictionary<int, List<int>> jpw) {
-        int Difference { get; } = d;
-        Dictionary<int, List<int>> JobsPerWorker { get; } = jpw;
+    public class Answer {
+        public int Difference { get; }
+        public Dictionary<int, List<Job>> JobsPerWorker { get; }
+
+        public Answer(Dictionary<int, List<Job>> jpw) {
+            this.JobsPerWorker = jpw;
+            this.Difference = this.CalculateDiff();
+        }
 
         public void Print() {
             Console.BackgroundColor = ConsoleColor.Magenta;
@@ -9,11 +14,95 @@ namespace ai_proj_4 {
             Console.ResetColor();
             foreach (var kvp in JobsPerWorker) {
                 Console.Write($"# Worker ID : {kvp.Key} => ");
-                foreach (int j in kvp.Value) {
-                    Console.Write($"{kvp.Key} ");
+                foreach (Job j in kvp.Value) {
+                    Console.Write($"{j.Hour} ");
                 }
                 Console.WriteLine("");
             }
         }
+
+        private int CalculateDiff() {
+            int max = int.MinValue;
+            int min = int.MaxValue;
+            foreach (List<Job> jobs in this.JobsPerWorker.Values) {
+                int sum = jobs.Sum(x => x.Hour);
+                if (sum > max) {
+                    max = sum;
+                } else if (sum < min) {
+                    min = sum;
+                }
+            }
+            return max - min;
+        }
+
+        private static int PickRandomAvailableWorker(List<bool> wpj, int? avoid) {
+            Random rand = new();
+
+            List<int> picks = [];
+
+            for (int i = 0; i < wpj.Count; i++) {
+                if (wpj[i]) {
+                    if (avoid != null && i == avoid) {
+                        continue;
+                    }
+                    picks.Add(i);
+                }
+            }
+
+            if (picks.Count < 1) {
+                if (avoid != null) {
+                    return (int)avoid;
+                }
+                throw new InvalidDataException("No worker found to handle the job!");
+            }
+
+            return picks[rand.Next(picks.Count)];
+        }
+
+        public Answer Mutate(List<List<bool>> c) {
+            while (true) {
+                var newJPW = this.JobsPerWorker.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => new List<Job>(kvp.Value)
+                );
+
+                Random rand = new();
+
+                int from = rand.Next(JobsPerWorker.Count - 1);
+                List<Job> fromJobList = newJPW[from];
+
+                if (fromJobList.Count == 0) {
+                    continue;
+                }
+
+                int movingId = rand.Next(fromJobList.Count - 1);
+                Job movingJob = fromJobList[movingId];
+
+                int to = PickRandomAvailableWorker(c[movingJob.Id], from);
+                List<Job> toJobList = newJPW[to];
+
+                fromJobList.Remove(movingJob);
+                toJobList.Add(movingJob);
+
+                return new(newJPW);
+
+            }
+        }
+
+        public static Answer GenerateRandomAnswer(List<Job> j, List<List<bool>> c) {
+            Dictionary<int, List<Job>> jpw = [];
+
+            for (int i = 0; i < j.Count; i++) {
+                int wid = PickRandomAvailableWorker(c[i], null);
+                if (!jpw.ContainsKey(wid)) {
+                    jpw.Add(wid, []);
+                }
+                jpw[wid].Add(j[i]);
+            }
+
+            return new(jpw);
+        }
+
+
     }
 }

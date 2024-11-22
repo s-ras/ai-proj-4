@@ -21,7 +21,7 @@ namespace ai_proj_4 {
             }
         }
 
-        public static void ReadDataSet(out int WorkersCount, out int JobsCount, out List<int> Jobs, out List<List<bool>> Capabilities) {
+        public static void ReadDataSet(out int WorkersCount, out int JobsCount, out List<Job> Jobs, out List<List<bool>> Compatibilities) {
 
             if (!File.Exists(fp)) {
                 Console.BackgroundColor = ConsoleColor.Red;
@@ -44,23 +44,25 @@ namespace ai_proj_4 {
 
             Jobs = [];
 
-            foreach (string j in JobString) {
-                if (int.TryParse(j, out int value)) {
-                    Jobs.Add(value);
+            for (int i = 0; i < JobString.Count; i++) {
+                if (int.TryParse(JobString[i], out int value)) {
+                    Jobs.Add(new(i, value));
                 }
             }
 
-            Capabilities = [];
+            Compatibilities = [];
 
             for (int i = 2; i < lines.Count; i++) {
                 List<string> CapabilitiesString = [.. lines[i].Split(" ")];
                 List<bool> JobCapability = [];
                 foreach (string c in CapabilitiesString) {
-                    if (bool.TryParse(c, out bool value)) {
-                        JobCapability.Add(value);
+                    if (c == "0") {
+                        JobCapability.Add(false);
+                    } else if (c == "1") {
+                        JobCapability.Add(true);
                     }
                 }
-                Capabilities.Add(JobCapability);
+                Compatibilities.Add(JobCapability);
             }
 
         }
