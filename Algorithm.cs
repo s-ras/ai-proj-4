@@ -40,7 +40,6 @@ namespace ai_proj_4 {
         public static readonly Algorithm AlgorithmD;
         public static readonly Algorithm AlgorithmE;
         public static readonly Algorithm AlgorithmF;
-        public static readonly Algorithm AlgorithmG;
 
         public static void Init() {
             return;
@@ -52,8 +51,11 @@ namespace ai_proj_4 {
 
                 Answer? best = null;
 
-                while (sw.ElapsedMilliseconds < t && !Program._shouldTerminate) {
-                    Answer random = Answer.GenerateRandomAnswer(j, c);
+                while (true) {
+                    if ((t > 0 && sw.ElapsedMilliseconds > t) || Program._shouldTerminate) {
+                        break;
+                    }
+                    Answer random = Answer.GenerateRandomAnswer(j, wc, c);
 
                     if (best == null) {
                         best = random;
@@ -68,11 +70,15 @@ namespace ai_proj_4 {
             AlgorithmB = new("First Choice Hill Climbing", (wc, jc, j, c, t) => {
                 Stopwatch sw = Stopwatch.StartNew();
 
-                Answer current = Answer.GenerateRandomAnswer(j, c);
+                Answer current = Answer.GenerateRandomAnswer(j, wc, c);
 
                 Answer best = current;
 
-                while (sw.ElapsedMilliseconds < t && !Program._shouldTerminate) {
+                while (true) {
+                    if ((t > 0 && sw.ElapsedMilliseconds > t) || Program._shouldTerminate) {
+                        break;
+                    }
+
                     Answer newAns = current.Mutate(c);
 
                     if (newAns.Difference < current.Difference) {
@@ -96,15 +102,23 @@ namespace ai_proj_4 {
 
                 Answer? best = null;
 
-                while (sw.ElapsedMilliseconds < t && !Program._shouldTerminate) {
+                while (true) {
+                    if ((t > 0 && sw.ElapsedMilliseconds > t) || Program._shouldTerminate) {
+                        break;
+                    }
+
                     int attention = ATTENTION_SPAN;
-                    Answer current = Answer.GenerateRandomAnswer(j, c);
+                    Answer current = Answer.GenerateRandomAnswer(j, wc, c);
                     if (best == null) {
                         best = current;
                     } else if (current.Difference < best.Difference) {
                         best = current;
                     }
-                    while (sw.ElapsedMilliseconds < t && !Program._shouldTerminate && attention > 0) {
+                    while (attention > 0) {
+                        if ((t > 0 && sw.ElapsedMilliseconds > t) || Program._shouldTerminate) {
+                            break;
+                        }
+
                         Answer newAns = current.Mutate(c);
 
                         if (newAns.Difference < current.Difference) {
@@ -139,11 +153,15 @@ namespace ai_proj_4 {
 
                 Stopwatch sw = Stopwatch.StartNew();
 
-                Answer current = Answer.GenerateRandomAnswer(j, c);
+                Answer current = Answer.GenerateRandomAnswer(j, wc, c);
 
                 Answer best = current;
 
-                while (sw.ElapsedMilliseconds < t && !Program._shouldTerminate) {
+                while (true) {
+                    if ((t > 0 && sw.ElapsedMilliseconds > t) || Program._shouldTerminate) {
+                        break;
+                    }
+
                     Answer newAns = GiveBestNeighbor(current);
 
                     if (newAns.Difference < current.Difference) {
@@ -181,11 +199,15 @@ namespace ai_proj_4 {
 
                 Stopwatch sw = Stopwatch.StartNew();
 
-                Answer current = Answer.GenerateRandomAnswer(j, c);
+                Answer current = Answer.GenerateRandomAnswer(j, wc, c);
 
                 Answer best = current;
 
-                while (sw.ElapsedMilliseconds < t && !Program._shouldTerminate) {
+                while (true) {
+                    if ((t > 0 && sw.ElapsedMilliseconds > t) || Program._shouldTerminate) {
+                        break;
+                    }
+
                     Answer newAns = GiveBestDescendant(current);
 
                     if (newAns.Difference < current.Difference) {
@@ -207,7 +229,7 @@ namespace ai_proj_4 {
 
                 Stopwatch sw = Stopwatch.StartNew();
 
-                Answer current = Answer.GenerateRandomAnswer(j, c);
+                Answer current = Answer.GenerateRandomAnswer(j, wc, c);
 
                 Answer soul = current;
 
@@ -215,7 +237,11 @@ namespace ai_proj_4 {
 
                 int bad_steps = 0;
 
-                while (sw.ElapsedMilliseconds < t && !Program._shouldTerminate) {
+                while (true) {
+                    if ((t > 0 && sw.ElapsedMilliseconds > t) || Program._shouldTerminate) {
+                        break;
+                    }
+
                     soul = current.Mutate(c);
 
                     if (soul.Difference < current.Difference) {
@@ -242,13 +268,17 @@ namespace ai_proj_4 {
 
                 Stopwatch sw = Stopwatch.StartNew();
 
-                Answer current = Answer.GenerateRandomAnswer(j, c);
+                Answer current = Answer.GenerateRandomAnswer(j, wc, c);
 
                 Answer best = current;
 
                 Random rand = new();
 
-                while (sw.ElapsedMilliseconds < t && !Program._shouldTerminate) {
+                while (true) {
+                    if ((t > 0 && sw.ElapsedMilliseconds > t) || Program._shouldTerminate) {
+                        break;
+                    }
+
                     Answer newAns = current.Mutate(c);
 
                     if (newAns.Difference < current.Difference || rand.Next(10) <= FAULT_TOLERANCE) {

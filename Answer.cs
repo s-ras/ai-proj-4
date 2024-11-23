@@ -89,14 +89,15 @@ namespace ai_proj_4 {
             }
         }
 
-        public static Answer GenerateRandomAnswer(List<Job> j, List<List<bool>> c) {
+        public static Answer GenerateRandomAnswer(List<Job> j, int wc, List<List<bool>> c) {
             Dictionary<int, List<Job>> jpw = [];
+
+            for (int i = 0; i < wc; i++) {
+                jpw.Add(i, []);
+            }
 
             for (int i = 0; i < j.Count; i++) {
                 int wid = PickRandomAvailableWorker(c[i], null);
-                if (!jpw.ContainsKey(wid)) {
-                    jpw.Add(wid, []);
-                }
                 jpw[wid].Add(j[i]);
             }
 

@@ -25,10 +25,10 @@ namespace ai_proj_4 {
 
             do {
                 Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("How many seconds do you want to run the algorithm?");
+                Console.WriteLine("How many seconds do you want to run the algorithm? (0 for infinite)");
                 Console.ResetColor();
 
-                if (int.TryParse(Console.ReadLine(), out s) && s > 0) {
+                if (int.TryParse(Console.ReadLine(), out s) && s >= 0) {
                     time = s * 1000;
                     break;
                 }
