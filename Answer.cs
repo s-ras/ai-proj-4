@@ -68,14 +68,14 @@ namespace ai_proj_4 {
 
                 Random rand = new();
 
-                int from = rand.Next(JobsPerWorker.Count - 1);
+                int from = rand.Next(JobsPerWorker.Count);
                 List<Job> fromJobList = newJPW[from];
 
                 if (fromJobList.Count == 0) {
                     continue;
                 }
 
-                int movingId = rand.Next(fromJobList.Count - 1);
+                int movingId = rand.Next(fromJobList.Count);
                 Job movingJob = fromJobList[movingId];
 
                 int to = PickRandomAvailableWorker(c[movingJob.Id], from);
