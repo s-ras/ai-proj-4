@@ -59,7 +59,7 @@ namespace ai_proj_4 {
 
                     if (best == null) {
                         best = random;
-                    } else if (random.Difference < best.Difference) {
+                    } else if (random.Difference <= best.Difference) {
                         best = random;
                     }
                 }
@@ -81,11 +81,11 @@ namespace ai_proj_4 {
 
                     Answer newAns = current.Mutate(c);
 
-                    if (newAns.Difference < current.Difference) {
+                    if (newAns.Difference <= current.Difference) {
                         current = newAns;
                     }
 
-                    if (newAns.Difference < best.Difference) {
+                    if (newAns.Difference <= best.Difference) {
                         best = newAns;
                     }
 
@@ -111,7 +111,7 @@ namespace ai_proj_4 {
                     Answer current = Answer.GenerateRandomAnswer(j, wc, c);
                     if (best == null) {
                         best = current;
-                    } else if (current.Difference < best.Difference) {
+                    } else if (current.Difference <= best.Difference) {
                         best = current;
                     }
                     while (attention > 0) {
@@ -121,11 +121,11 @@ namespace ai_proj_4 {
 
                         Answer newAns = current.Mutate(c);
 
-                        if (newAns.Difference < current.Difference) {
+                        if (newAns.Difference <= current.Difference) {
                             current = newAns;
                         }
 
-                        if (newAns.Difference < best.Difference) {
+                        if (newAns.Difference <= best.Difference) {
                             best = newAns;
                         }
                     }
@@ -164,11 +164,11 @@ namespace ai_proj_4 {
 
                     Answer newAns = GiveBestNeighbor(current);
 
-                    if (newAns.Difference < current.Difference) {
+                    if (newAns.Difference <= current.Difference) {
                         current = newAns;
                     }
 
-                    if (newAns.Difference < best.Difference) {
+                    if (newAns.Difference <= best.Difference) {
                         best = newAns;
                     }
 
@@ -210,11 +210,11 @@ namespace ai_proj_4 {
 
                     Answer newAns = GiveBestDescendant(current);
 
-                    if (newAns.Difference < current.Difference) {
+                    if (newAns.Difference <= current.Difference) {
                         current = newAns;
                     }
 
-                    if (newAns.Difference < best.Difference) {
+                    if (newAns.Difference <= best.Difference) {
                         best = newAns;
                     }
 
@@ -244,10 +244,10 @@ namespace ai_proj_4 {
 
                     soul = current.Mutate(c);
 
-                    if (soul.Difference < current.Difference) {
+                    if (soul.Difference <= current.Difference) {
                         current = soul;
                         bad_steps = 0;
-                        if (current.Difference < best.Difference) {
+                        if (current.Difference <= best.Difference) {
                             best = current;
                         }
                     } else {
@@ -281,11 +281,11 @@ namespace ai_proj_4 {
 
                     Answer newAns = current.Mutate(c);
 
-                    if (newAns.Difference < current.Difference || rand.Next(10) <= FAULT_TOLERANCE) {
+                    if (newAns.Difference <= current.Difference || rand.Next(10) <= FAULT_TOLERANCE) {
                         current = newAns;
                     }
 
-                    if (newAns.Difference < best.Difference) {
+                    if (newAns.Difference <= best.Difference) {
                         best = newAns;
                     }
 
